@@ -27,35 +27,33 @@ ScalarConverter::~ScalarConverter() {
 
 void ScalarConverter::convert(std::string &str) {
 	std::cout << "convert called with " << str << std::endl;
-	long double literal;
+	long double literal_ld;
 	bool valid = true;
 	char *endptr;
-	literal = std::strtold(str.c_str(), &endptr);
+	literal_ld = std::strtold(str.c_str(), &endptr);
 
-	if (*endptr != '\0')
+	if (*endptr != '\0' && strncmp(endptr, "f", 2) != 0)
 		valid = false;
-	displayChar(str);
-	displayInt(literal, valid && str != "+inf" && str != "-inf" && str != "nan");
-	displayFloat(literal, valid, str);
-	displayDouble(literal, valid, str);
+	displayChar(literal_ld);
+	displayInt(literal_ld, valid && str != "+inf" && str != "-inf" && str != "nan");
+	displayFloat(literal_ld, valid, str);
+	displayDouble(literal_ld, valid, str);
 }
 
-void ScalarConverter::displayChar(std::string &str) {
+void ScalarConverter::displayChar(int c) {
 
-	if (str.length() == 1) {
-		if (isprint(static_cast<int>(str[0]))) {
-			std::cout << GREEN << "char: '" << str[0] << "'" << R << std::endl;
-			return;
-		}
-		else
-		{
-			std::cout << RED << "char: Non displayable" << R << std::endl;
-			return;
-		}
+	if (c < 0 || c > 127)
+	{
+		std::cout << RED << "char: impossible" << R << std::endl;
+		return;
+	}
+	if (isprint(c)) {
+		std::cout << GREEN << "char: '" << static_cast<char>(c) << "'" << R << std::endl;
+		return;
 	}
 	else
 	{
-		std::cout << RED <<  "char: impossible" << R << std::endl;
+		std::cout << RED << "char: Non displayable" << R << std::endl;
 		return;
 	}
 }

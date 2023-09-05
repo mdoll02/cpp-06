@@ -16,7 +16,7 @@ private:
 
 	~ScalarConverter();
 
-	static void displayChar(std::string &str);
+	static void displayChar(int c);
 	static void displayInt(long double &literal, bool valid);
 	static void displayFloat(long double &literal, bool valid, std::string &str);
 	static void displayDouble(long double &literal, bool valid, std::string &str);
