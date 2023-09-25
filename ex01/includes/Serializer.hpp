@@ -1,8 +1,8 @@
 #ifndef SERIALIZER_HPP
 # define SERIALIZER_HPP
 
-#include <cstdint>
 #include <string>
+#include <stdint.h>
 
 typedef struct Data {
 	std::string s1;
