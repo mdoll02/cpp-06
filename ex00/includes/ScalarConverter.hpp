@@ -21,6 +21,7 @@ private:
 	static void displayFloat(long double &literal, bool valid, std::string &str);
 	static void displayDouble(long double &literal, bool valid, std::string &str);
 	static bool displayPsuedoLiteral(std::string &str);
+	static bool isscience(std::string &str);
 };
 
 #endif

@@ -37,62 +37,70 @@ void ScalarConverter::convert(std::string &str) {
 		literal_ld = static_cast<int>(str[0]);
 	else {
 		literal_ld = std::strtold(str.c_str(), &endptr);
-		if (*endptr != '\0' && strncmp(endptr, "f", 2) != 0)
+		if (*endptr != '\0' && strncmp(endptr, "f", 2) != 0 && !isscience(str))
 			valid = false;
 	}
+
 	displayChar(static_cast<int>(literal_ld));
-	displayInt(literal_ld, valid && str != "+inf" && str != "-inf" && str != "nan" && str != "nanf");
+	displayInt(literal_ld, valid);
 	displayFloat(literal_ld, valid, str);
 	displayDouble(literal_ld, valid, str);
 }
 
 void ScalarConverter::displayChar(int c) {
+	std::cout << "char: ";
 
 	if (c < 0 || c > 127)
 	{
-		std::cout << RED << "char: impossible" << R << std::endl;
+		std::cout << RED "impossible" << R << std::endl;
 		return;
 	}
 	if (isprint(c)) {
-		std::cout << GREEN << "char: '" << static_cast<char>(c) << "'" << R << std::endl;
+		std::cout << GREEN << "'" << static_cast<char>(c) << "'" << R << std::endl;
 		return;
 	}
 	else
 	{
-		std::cout << RED << "char: Non displayable" << R << std::endl;
+		std::cout << RED << "Non displayable" << R << std::endl;
 		return;
 	}
 }
 
 void ScalarConverter::displayInt(long double &literal, bool valid) {
-	if (!valid || literal > INT_MAX || literal < INT_MIN) {
-		std::cout << RED << "int: impossible" << R << std::endl;
+	std::cout << "int: ";
+
+	if (!valid || literal > INT_MAX || literal < INT_MIN || literal != static_cast<int>(literal)) {
+		std::cout << RED "impossible" << R << std::endl;
 		return;
 	}
-	std::cout << GREEN << "int: " << static_cast<int>(literal) << R << std::endl;
+	std::cout << GREEN << static_cast<int>(literal) << R << std::endl;
 }
 
 void ScalarConverter::displayFloat(long double &literal, bool valid, std::string &str) {
+	std::cout << "float: ";
+
 	if (displayPsuedoLiteral(str))
 		return;
 	if (!valid || literal > FLT_MAX || literal < -FLT_MAX) {
-		std::cout << RED << "float: impossible" << R << std::endl;
+		std::cout << RED << "impossible" << R << std::endl;
 		return;
 	}
-	std::cout << GREEN << "float: " << static_cast<double>(literal);
+	std::cout << GREEN << static_cast<double>(literal);
 	if (static_cast<double>(literal) == static_cast<int>(literal))
 		std::cout << ".0";
 	std::cout << "f" << R << std::endl;
 }
 
 void ScalarConverter::displayDouble(long double &literal, bool valid, std::string &str) {
+	std::cout << "double: ";
+
 	if (displayPsuedoLiteral(str))
 		return;
 	if (!valid || literal > DBL_MAX || literal < -DBL_MAX) {
-		std::cout << RED << "double: impossible" << R << std::endl;
+		std::cout << RED << "impossible" << R << std::endl;
 		return;
 	}
-	std::cout << GREEN << "double: " << static_cast<double>(literal);
+	std::cout << GREEN << static_cast<double>(literal);
 	if (static_cast<double>(literal) == static_cast<int>(literal))
 		std::cout << ".0";
 	std::cout << R << std::endl;
@@ -101,33 +109,43 @@ void ScalarConverter::displayDouble(long double &literal, bool valid, std::strin
 bool ScalarConverter::displayPsuedoLiteral(std::string &str) {
 	if (str == "+inff")
 	{
-		std::cout << GREEN << "float: " << static_cast<float>(std::numeric_limits<float>::infinity()) << R << std::endl;
+		std::cout << GREEN << static_cast<float>(std::numeric_limits<float>::infinity()) << R << std::endl;
 		return true;
 	}
 	if (str == "-inff")
 	{
-		std::cout << GREEN << "float: " << static_cast<float>(-std::numeric_limits<float>::infinity()) << R << std::endl;
+		std::cout << GREEN << static_cast<float>(-std::numeric_limits<float>::infinity()) << R << std::endl;
 		return true;
 	}
 	if (str == "nanf")
 	{
-		std::cout << GREEN << "float: " << static_cast<float>(-std::numeric_limits<float>::quiet_NaN()) << R << std::endl;
+		std::cout << GREEN << static_cast<float>(-std::numeric_limits<float>::quiet_NaN()) << R << std::endl;
 		return true;
 	}
 	if (str == "+inf")
 	{
-		std::cout << GREEN << "double: " << static_cast<double>(std::numeric_limits<double>::infinity()) << R << std::endl;
+		std::cout << GREEN << static_cast<double>(std::numeric_limits<double>::infinity()) << R << std::endl;
 		return true;
 	}
 	if (str == "-inf")
 	{
-		std::cout << GREEN << "double: " << static_cast<double>(-std::numeric_limits<double>::infinity()) << R << std::endl;
+		std::cout << GREEN << static_cast<double>(-std::numeric_limits<double>::infinity()) << R << std::endl;
 		return true;
 	}
 	if (str == "nan")
 	{
-		std::cout << GREEN << "double: " << static_cast<double>(-std::numeric_limits<double>::quiet_NaN()) << R << std::endl;
+		std::cout << GREEN << static_cast<double>(-std::numeric_limits<double>::quiet_NaN()) << R << std::endl;
 		return true;
 	}
+	return false;
+}
+
+bool ScalarConverter::isscience(std::string &str) {
+	if (str == "nan" || str == "nanf")
+		return true;
+	if (str == "+inf" || str == "+inff")
+		return true;
+	if (str == "-inf" || str == "-inff")
+		return true;
 	return false;
 }
