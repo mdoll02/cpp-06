@@ -41,7 +41,7 @@ void ScalarConverter::convert(std::string &str) {
 			valid = false;
 	}
 	displayChar(static_cast<int>(literal_ld));
-	displayInt(literal_ld, valid && str != "+inf" && str != "-inf" && str != "nan");
+	displayInt(literal_ld, valid && str != "+inf" && str != "-inf" && str != "nan" && str != "nanf");
 	displayFloat(literal_ld, valid, str);
 	displayDouble(literal_ld, valid, str);
 }
