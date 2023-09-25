@@ -5,6 +5,8 @@
 #include <cstdlib>
 #include <cfloat>
 #include <iomanip>
+#include <limits>
+#include <climits>
 
 ScalarConverter::ScalarConverter() {
 	std::cout << "Default constructor called" << std::endl;
