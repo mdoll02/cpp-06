@@ -32,11 +32,15 @@ void ScalarConverter::convert(std::string &str) {
 	long double literal_ld;
 	bool valid = true;
 	char *endptr;
-	literal_ld = std::strtold(str.c_str(), &endptr);
 
-	if (*endptr != '\0' && strncmp(endptr, "f", 2) != 0)
-		valid = false;
-	displayChar(literal_ld);
+	if (str.size() == 1 && isprint(str[0]) && !isdigit(str[0]))
+		literal_ld = static_cast<int>(str[0]);
+	else {
+		literal_ld = std::strtold(str.c_str(), &endptr);
+		if (*endptr != '\0' && strncmp(endptr, "f", 2) != 0)
+			valid = false;
+	}
+	displayChar(static_cast<int>(literal_ld));
 	displayInt(literal_ld, valid && str != "+inf" && str != "-inf" && str != "nan");
 	displayFloat(literal_ld, valid, str);
 	displayDouble(literal_ld, valid, str);
